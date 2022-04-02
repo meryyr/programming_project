@@ -70,21 +70,21 @@ class AssociatedDisease(Metadata):
    
    def execute(self, gene):
         
-       #if type(gene) == int:
-       if (int(gene) in set(self._data['geneid'].unique())) :
-           l = (self._data).loc[self._data['geneid'] == int(gene)]
-           g = l['disease_name'].tolist()
-           new_l = []
-           c = 0
-           for i in g:
-               if g[c] not in new_l:
-                   new_l.append(g[c])
-                   c += 1
-               else:
-                   c += 1
-           return new_l
-            # else:
-                # return 'The gene is not present in the merged dataset, therfore there is not an association of this gene with a disease'
+       if type(gene) == int:
+           if (gene in set(self._data['geneid'].unique())) :
+               l = (self._data).loc[self._data['geneid'] == gene]
+               g = l['disease_name'].tolist()
+               new_l = []
+               c = 0
+               for i in g:
+                   if g[c] not in new_l:
+                       new_l.append(g[c])
+                       c += 1
+                   else:
+                       c += 1
+               return new_l
+                # else:
+                    # return 'The gene is not present in the merged dataset, therfore there is not an association of this gene with a disease'
 
        if (gene in set(self._data['gene_symbol'].unique())):
            l = (self._data).loc[self._data['gene_symbol'] == gene]
@@ -118,8 +118,8 @@ class AssociatedGene(Metadata):
                     c += 1
             return new_l
             
-         if (str(disease) in set(self._data['diseaseid'].unique())):
-            l = (self._data).loc[self._data['diseaseid'] == str(disease)]
+         if (disease in set(self._data['diseaseid'].unique())):
+            l = (self._data).loc[self._data['diseaseid'] == disease]
             g = l['gene_symbol'].tolist()
             new_l = []
             c = 0
