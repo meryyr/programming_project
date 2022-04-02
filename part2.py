@@ -70,22 +70,7 @@ class AssociatedDisease(Metadata):
    
    def execute(self, gene):
         
-       if type(gene) == int:
-           if (gene in set(self._data['geneid'].unique())) :
-               l = (self._data).loc[self._data['geneid'] == gene]
-               g = l['disease_name'].tolist()
-               new_l = []
-               c = 0
-               for i in g:
-                   if g[c] not in new_l:
-                       new_l.append(g[c])
-                       c += 1
-                   else:
-                       c += 1
-               return new_l
-                # else:
-                    # return 'The gene is not present in the merged dataset, therfore there is not an association of this gene with a disease'
-
+       #if type(gene) == int:
        if (gene in set(self._data['gene_symbol'].unique())):
            l = (self._data).loc[self._data['gene_symbol'] == gene]
            g = l['disease_name'].tolist()
@@ -98,6 +83,24 @@ class AssociatedDisease(Metadata):
                else:
                    c += 1
            return new_l
+           
+           
+       if (int(gene) in set(self._data['geneid'].unique())) :
+           l = (self._data).loc[self._data['geneid'] == int(gene)]
+           g = l['disease_name'].tolist()
+           new_l = []
+           c = 0
+           for i in g:
+               if g[c] not in new_l:
+                   new_l.append(g[c])
+                   c += 1
+               else:
+                   c += 1
+           return new_l
+            # else:
+                # return 'The gene is not present in the merged dataset, therfore there is not an association of this gene with a disease'
+
+       
        return 'The gene is not present in the merged dataset, therfore there is not an association of this gene with a disease'
     
 
