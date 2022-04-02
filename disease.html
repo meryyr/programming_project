@@ -1,0 +1,11 @@
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<html>
+    <head>
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        <h1><TT><span class="file">disease_evidences.tsv, {{"{:.2f}".format(size/1024**2)}}MB</span></TT> </h1>
+        {{data | safe}}
+		<i><a href="/"><span class = "home_link">Go back to home page</span></a></i>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<html>
+    <head>
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        <h1><TT><span class="file">gene_evidences.tsv, {{"{:.2f}".format(size/1024**2)}}MB</span></TT> </h1>
+        {{data | safe}}
+		<i><a href="/"><span class = "home_link">Go back to home page</span></a></i>
+    </body>                     <!--- class = 'file': see span.file in the style.css file --->
+</html>                         <!--- "{:.2f}".format() makes sure only 2 digits afters the comma are returned--->    
+                                <!--- size/1024**2 to convert from bits/bytes to megabits/megabytes ? --->

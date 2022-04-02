@@ -1,18 +1,17 @@
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <html>
     <head>
     </head>
     <body>
-        <h1>Genes and Diseases</h1>
-        <h2>List of Operations</h2>
-      
-	<ul>
-        {% for i in operations: %}
-		<li><a href= {{url_for('operation', type = i )}}>{{i}}</a></li>
-		{% endfor %} 
-
-		{% for k in op_input: %}
-		<li><a href= "operation_{{k}}">{{k}}</a></li>
-		{% endfor %} 
-	</ul>
+        <h1>Operations on the DisGeNET COVID-19 data collection</h1>
+        <h2>Using  <TT><span class="file"> <a href="/gene">gene_evidences.tsv</a> </span></TT> and <TT><span class="file"> <a href="/disease">disease_evidences.tsv</a>  </span></TT></h2>
+            <br>
+            {% for i in operations %}
+                <big><li><a href= {{url_for('operation', type = i )}}>{{i}}</a></li></big>
+            {%endfor%}
+            {% for k in op_input: %}
+                <big><li><a href= "operation_{{k}}">{{k}}</a></li></big>
+            {% endfor %}
+    
     </body>
 </html>

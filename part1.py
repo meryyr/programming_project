@@ -1,8 +1,5 @@
 import part2
-from abc import ABC, abstractmethod
 import pandas as pd
-from typing import Set
-
 
 class ImportDisease:
 
@@ -41,10 +38,9 @@ class ImportGene:
         return result   
         
  
-
 class MergeDataset(ImportDisease,ImportGene):
     
-    def __init__(self, dfdisease, dfgene, requested_operation, operations=(part2.Merge,part2.AssociatedDisease,part2.AssociatedGene)):
+    def __init__(self, dfdisease, dfgene, requested_operation, operations=(part2.MergedDataset,part2.AssociatedDisease,part2.AssociatedGene)):
         ImportDisease.__init__(self, dfdisease)
         ImportGene.__init__(self, dfgene)
         self.merged_dataset = pd.merge(self.dfdisease,self.dfgene,  on = ('pmid','sentence', 'nsentence'), how = "inner")
@@ -53,7 +49,7 @@ class MergeDataset(ImportDisease,ImportGene):
         self.operations = operations
         
     def operation(self):
-        result = part2.Merge(self.merged_dataset).execute()
+        result = part2.MergedDataset(self.merged_dataset).execute()
         return result
                 
     def input_gene(self,gene):
@@ -71,7 +67,7 @@ class Registry:
         # return n_o
         
     def name_operations(self):
-        n_o = ['RowsColumnsGene','RowsColumnsDisease','ColumnLabelGene','ColumnLabelDisease','DistinctGene','DistinctDisease','Merge']
+        n_o = ['RowsColumnsGene','RowsColumnsDisease','ColumnLabelGene','ColumnLabelDisease','DistinctGene','DistinctDisease','MergedDataset']
         return n_o
     
     def name_operations_input(self):
@@ -98,50 +94,14 @@ class Registry:
         return r
     
     def Sentences(self,value):
-        r = {'SentenceGene': ImportGene(part2.Sentence).input_operation(value),
-             'SentenceDisease': ImportDisease(part2.Sentence).input_operation(value)}
-        return r
-        
+        r = {'SentenceGene': ImportGene(part2.Sentence).input_operation(value),'SentenceDisease': ImportDisease(part2.Sentence).input_operation(value)}
+        return r 
+  
     def Merge(self):
-        r = {'Merge': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.Merge).operation()}
+        r = {'MergedDataset': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.MergedDataset).operation()}
         return r 
         
-    def AssociationsD(self,value):
-      r = {'AssociatedDiseases': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedDisease).input_gene(value)} 
+    def Associations(self,value):
+      r = {'AssociatedDiseases': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedDisease).input_gene(value),'AssociatedGenes': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedGene).input_disease(value)} 
       return r
     
-    def AssociationsG(self,value):
-      r = {'AssociatedGenes': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedGene).input_disease(value)}
-      return r
-
-
-  
-#z = ImportGene.input_operation('part2.Sentence')
-#d = {'RowsColumnsGene','RowsColumnsDisease','ColumnLabelGene','ColumnLabelDisease','DistinctGene','DistinctDisease','SentenceGene','SentenceDisease','Merge'}
-#dg = pd.read_csv("gene_evidences.tsv", delimiter="\t")     
-# z = (part2.Sentence(dg)).execute_input()
-# print(z)
-#display = Registry().Sentences(1)
-#print(display)
-
-
-# display = Registry().Sentences('part2.Sentence',1)
-# print(display)
-
-#print(MergeDataset("disease_evidences.tsv","gene_evidences.tsv").merge())
-
-#dd = pd.read_csv("disease_evidences.tsv", delimiter="\t")
-#dg = pd.read_csv("gene_evidences.tsv", delimiter="\t")
-
-# merged_dataset = pd.merge(dfdisease,dfgene, on = ('pmid','sentence', 'nsentence'))
-
-    
-#print(part2.AssociatedDisease(pd.merge(dd,dg,  on = ('pmid','sentence', 'nsentence'), how = "inner")).execute(1))
-# value ='C5139167'
-# new = []
-
-# for i in value:
-    # if i.isdigit():
-        # i = str(i)
-# print(value)        
-#print(new)

@@ -1,12 +1,21 @@
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <html>
- 
     <body>
-		
 		<form method = "POST">
-		<label for = "label"> Insert a gene ID or a gene symbol to get the sentences associated to the input gene:</label>
+		<label for = "label">Insert a gene ID or a gene symbol to get the sentences associated to the input gene:</label>
 		<p><input type = "text" name = "value" /></p>
 		<p><input type = "submit" value ="Submit" /></p>
 		</form>
-		{{display}}   
+		{%if value == 'No input yet'%}   <!--- the check if value == 'No input yet' --->
+			<!--- show nothing if value is 'No input yet' --->
+		{%elif display == None%} <!--- elif display == None: means that the part 2 sentence operation returned None and no sentences were found, however there /is/ a 'value' now, which is the input, so we can use {{value}} --->
+			<h4>No sentences found for gene {{value}}, try another one</h4> 
+		{%else%} <!--- else there is an output and we can show it --->
+			<h2> {{display[1]}} sentences found for gene {{value}}</h2> <!--- display[1] prints 2nd element of the display list --->
+			{% for i in display[0] %}
+				<i><p>{{i | safe}}</p><i> <!--- if there was no ' | safe' html would just print everything, without caring about any html syntax, and the sentences /have/ html syntax so we need ' | safe' --->
+			{% endfor %}
+		{%endif%}
+		<i><a href="/"><span class = "home_link">Go back to home page</span></a></i> <!--- ' link to go back to the home page ('href = "/"'). class = 'home_link': check the style.css file for 'span.home_link', that is were we set the style/position for this link' --->
     </body>
 </html>

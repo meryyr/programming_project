@@ -1,4 +1,4 @@
-<html>
+<!-- <html>
     <head>
         <title>{{ title }}</title>
     </head>
@@ -7,5 +7,97 @@
       
         {{display}}
     
+    </body>
+</html> -->
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+
+<html>
+    <head>
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        {% if operation == 'RowsColumnsGene' %}
+            <h2>Dimensions of the <TT><big>gene_evidences.tsv</big></TT> file:</h2>
+            <br>
+            Number of rows: {{display[0]}}
+            <br>
+            Number of colums: {{display[1]}}
+        {%endif%}
+
+        {% if operation == 'RowsColumnsDisease' %}
+            <h2>Dimensions of the <TT><big>disease_evidences.tsv</big></TT> file:</h2>
+            <br>
+            Number of rows: {{display[0]}}
+            <br>
+            Number of colums: {{display[1]}}
+        {%endif%}
+
+        {% if operation == 'Merge' %}
+            {{html | safe}}
+        {%endif%}
+
+        {% if operation == 'ColumnLabelDisease' %}
+        <h2>Column labels of  <TT><big>disease_evidences.tsv</big></TT>:</h2>
+        <br>
+            {%for i in display%}
+                <i>{{i}}</i>
+                <br> 
+            {%endfor%}  
+        {%endif%}
+
+        {% if operation == 'ColumnLabelGene' %}
+        <h2>Column labels of  <TT><big>gene_evidences.tsv</big></TT>:</h2>
+        <br>
+            {%for i in display%}
+                <i>{{i}}</i> 
+                <br> 
+            {%endfor%}  
+        {%endif%}
+        
+        {% if operation == 'DistinctGene' %}
+            <h2>There are {{display[1]}}</small></a> </span> distinct gene ID's</h2>
+            <br>
+
+            {%for i in display[0]%}  
+                {{i}}
+            {%endfor%}
+			<br>
+		
+		<h2>There are {{display[1]}}</small></a> </span> distinct gene symbols</h2>
+            <br>
+			
+			{%for i in display[2]%}    
+                {{i}}
+				<br>
+            {%endfor%}
+		{%endif%}
+		
+        {% if operation == 'DistinctDisease' %}
+        <h2>There are {{display[1]}}</small></a> </span> distinct disease ID's</h2>
+        <br>
+
+            {%for i in display[0]%}    
+                {{i}}
+                <br>
+            {%endfor%}
+		<h2>There are {{display[1]}}</small></a> </span> distinct disease names</h2>
+        <br>
+            {%for i in display[2]%}    
+                {{i}}
+				<br>
+            {%endfor%}
+        {%endif%}
+		
+		{% if operation == 'MergedDataset' %}
+
+		<h2>10-top most frequent distinct association between genes and diseases</h2>
+		<br>
+		<ol>
+		{%for i in range(display[1])%}
+		<li> Gene <b>{{display[0][i][0]}}</b> and <b>{{display[0][i][1]}}</b></li>
+		{%endfor%}
+		</ol>
+		{%endif%}
+		<i><a href="/"><span class = "home_link">Go back to home page</span></a></i> 
     </body>
 </html>
