@@ -106,8 +106,12 @@ class Registry:
         r = {'Merge': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.Merge).operation()}
         return r 
         
-    def Associations(self,value):
-      r = {'AssociatedDiseases': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedDisease).input_gene(value), 'AssociatedGenes': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedGene).input_disease(value)}
+    def AssociationsD(self,value):
+      r = {'AssociatedDiseases': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedDisease).input_gene(value)} 
+      return r
+    
+    def AssociationsG(self,value):
+      r = {'AssociatedGenes': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedGene).input_disease(value)}
       return r
 
 
@@ -126,11 +130,18 @@ class Registry:
 
 #print(MergeDataset("disease_evidences.tsv","gene_evidences.tsv").merge())
 
-dd = pd.read_csv("disease_evidences.tsv", delimiter="\t")
-dg = pd.read_csv("gene_evidences.tsv", delimiter="\t")
+#dd = pd.read_csv("disease_evidences.tsv", delimiter="\t")
+#dg = pd.read_csv("gene_evidences.tsv", delimiter="\t")
 
 # merged_dataset = pd.merge(dfdisease,dfgene, on = ('pmid','sentence', 'nsentence'))
 
     
-print(part2.AssociatedGene(pd.merge(dd,dg,  on = ('pmid','sentence', 'nsentence'), how = "inner")).execute('C5139167'))
+#print(part2.AssociatedDisease(pd.merge(dd,dg,  on = ('pmid','sentence', 'nsentence'), how = "inner")).execute(1))
+# value ='C5139167'
+# new = []
 
+# for i in value:
+    # if i.isdigit():
+        # i = str(i)
+# print(value)        
+#print(new)

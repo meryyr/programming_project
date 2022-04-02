@@ -31,16 +31,19 @@ def sentence_disease():
     display = Registry().Sentences(value)[str('SentenceDisease')]
     return render_template('sentencedisease.html', display=display)
 
+
+
 @app.route('/operation_AssociatedDisease')
 def AssociatedDisease():
     return render_template('associatedisease.html')
 
-    
 @app.route('/operation_AssociatedDisease', methods=['POST'])
 def associate_disease():
     value = request.form['valuedis']        
-    display = Registry().Associations(value)[str('AssociatedDiseases')]
+    display = Registry().AssociationsD(value)[str('AssociatedDiseases')]
     return render_template('associatedisease.html', display=display)
+
+
 
 @app.route('/operation_AssociatedGenes')
 def AssociatedGenes():
@@ -48,9 +51,10 @@ def AssociatedGenes():
 
 @app.route('/operation_AssociatedGenes', methods=['POST'])
 def associated_gene():
-    value = request.form['valueg']        
-    display = Registry().Associations(value)[str('AssociatedGenes')]
+    value = request.form['valueg']  
+    display = Registry().AssociationsG(value)[str('AssociatedGenes')]
     return render_template('associatedgene.html', display=display)
+
 
 
 @app.route('/operation', methods=['GET'])
