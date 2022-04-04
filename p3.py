@@ -6,8 +6,8 @@ app = Flask(__name__, template_folder='template')
 
 @app.route('/')
 def home_page():
-    operations= Registry().name_operations()
-    op_input = Registry().name_operations_input()
+    operations= Registry().name_operations
+    op_input = Registry().name_operations_input
     return render_template('home.html', operations = operations, op_input = op_input)
 
 @app.route('/gene') #page for viewing the gene tsv file

@@ -61,47 +61,38 @@ class MergeDataset(ImportDisease,ImportGene):
         return result
 
 class Registry:
-  
-    # def name_operations(self):
-        # n_o = ['Rows and columns of Gene dataset','Rows and columns of Disease dataset','Columns'labels of Gene dataset,'Columns'labels of Disease dataset','Distinct genes','Distinct diseases','Sentences associated to a given gene','Sentences associated to a given disease','10 top most associations', '']
-        # return n_o
-        
-    def name_operations(self):
-        n_o = ['RowsColumnsGene','RowsColumnsDisease','ColumnLabelGene','ColumnLabelDisease','DistinctGene','DistinctDisease','MergedDataset']
-        return n_o
-    
-    def name_operations_input(self):
-        n = ['SentenceDisease','SentenceGene','AssociatedDisease','AssociatedGenes']
-        return n
-    
-    # def execute_operation(self):
-        # l = ['RowsColumns']
-        # return l
 
+
+    def __init__(self,name_operations = ['RowsColumnsGene','RowsColumnsDisease','ColumnLabelGene','ColumnLabelDisease','DistinctGene','DistinctDisease','MergedDataset'],name_operations_input = ['SentenceDisease','SentenceGene','AssociatedDisease','AssociatedGenes']):
+        self.name_operations = name_operations
+        self.name_operations_input = name_operations_input
+    
     def RowsColumns(self):
-        r = {'RowsColumnsGene': ImportGene(part2.RowsColumns).operation(),
-             'RowsColumnsDisease': ImportDisease(part2.RowsColumns).operation()}
+        r = {self.name_operations[0]: ImportGene(part2.RowsColumns).operation(),
+             self.name_operations[1]: ImportDisease(part2.RowsColumns).operation()}
         return r 
     
     def ColumnLabel(self):
-        r = {'ColumnLabelGene': ImportGene(part2.ColumnLabel).operation(),
-             'ColumnLabelDisease': ImportDisease(part2.ColumnLabel).operation()}
+
+        r = {self.name_operations[2]: ImportGene(part2.ColumnLabel).operation(),
+             self.name_operations[3]: ImportDisease(part2.ColumnLabel).operation()}
         return r
             
     def Distinct(self):
-        r = {'DistinctGene': ImportGene(part2.Distinct).operation(),
-             'DistinctDisease': ImportDisease(part2.Distinct).operation()}
+    
+        r = {self.name_operations[4]: ImportGene(part2.Distinct).operation(),
+             self.name_operations[5]: ImportDisease(part2.Distinct).operation()}
         return r
     
+    def Merge(self):
+        r = {self.name_operations[6]: MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.MergedDataset).operation()}
+        return r
+        
     def Sentences(self,value):
-        r = {'SentenceGene': ImportGene(part2.Sentence).input_operation(value),'SentenceDisease': ImportDisease(part2.Sentence).input_operation(value)}
+        r = {name_operations_input[0]: ImportDisease(part2.Sentence).input_operation(value), name_operations_input[1]: ImportGene(part2.Sentence).input_operation(value)}
         return r 
   
-    def Merge(self):
-        r = {'MergedDataset': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.MergedDataset).operation()}
-        return r 
-        
     def Associations(self,value):
-      r = {'AssociatedDiseases': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedDisease).input_gene(value),'AssociatedGenes': MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedGene).input_disease(value)} 
-      return r
-    
+        r = {name_operations_input[2]: MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedDisease).input_gene(value),name_operations_input[3]: MergeDataset("disease_evidences.tsv","gene_evidences.tsv",part2.AssociatedGene).input_disease(value)} 
+        return r
+
