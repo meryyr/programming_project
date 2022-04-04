@@ -1,31 +1,27 @@
 import pandas as pd
 import numpy as np
 from abc import ABC, abstractmethod
-#hi
 
-class Metadata:
+class Data:
      
-     def __init__(self, data: pd.DataFrame): 
+     def __init__(self, data: pd.DataFrame):    #abstract class
         self._data = data 
         
      @abstractmethod
      def execute(self): 
         pass
 
-class RowsColumns(Metadata):
+class RowsColumns(Data):
  
     def execute(self):
-        return self._data.shape  #f"The number of rows of the dataset is {self._data.shape[0]} while the number of columns is {self._data.shape[1]}"            #(number of rows, number of columns)
-
-class ColumnLabel(Metadata):   
+        return self._data.shape  
+        
+class ColumnLabel(Data):   
 
     def execute(self):
-        # l = []
-        # for i in self._data.columns:
-            # l += [i] 
-        return self._data.columns #f"The labels of the columns are: {l}"
+        return self._data.columns 
         
-class Distinct(Metadata): 
+class Distinct(Data): 
 
     def execute(self):
         l = self._data.to_numpy()
@@ -42,19 +38,9 @@ class Distinct(Metadata):
         for e in unique_symbol:
             ls += [e]
        
-        #return final_distinct_id, final_distinct_symbol
         return  unique_id, len(unique_id), unique_symbol, len(unique_symbol)
-       # l = self._data.to_numpy()
-       # column = l[:,:1]
-       # final = np.unique(column)
-       # lf = []
-       # for i in final:
-            # lf += [i]
-       # final_distinct = (len(final),lf)
-       # return final_distinct
-  
 
-class Sentence(Metadata):
+class Sentence(Data):
   
     def execute(self,id_symbol):  
         l = [] 
@@ -80,10 +66,10 @@ class Sentence(Metadata):
         if not l: #empty lists are considered 'False', so if 'l' is empty then:
             return #"No such ID or symbol in the dataframe, try another one."
     
-        return l, len(l)#return f"{len(l)} sentences found: {l}"
+        return l, len(l) 
 
 
-class MergedDataset(Metadata):
+class MergedDataset(Data):
     
     def execute(self): 
         top10 = self._data[['gene_symbol', 'disease_name']].value_counts()[:10].index
@@ -91,7 +77,7 @@ class MergedDataset(Metadata):
         return top10, len(top10) #dataframe_a
        
        
-class AssociatedDisease(Metadata):
+class AssociatedDisease(Data):
    
    def execute(self, gene):
        
@@ -102,8 +88,7 @@ class AssociatedDisease(Metadata):
                l = (self._data).loc[self._data['geneid'] == int(gene)]
                g = l['disease_name'].tolist()
                new_g = set(g)
-               new_lg = list(new_g)
-               return new_lg, len(new_lg)
+               return new_g, len(new_g)
            
        except ValueError: 
            
@@ -111,11 +96,10 @@ class AssociatedDisease(Metadata):
                l = (self._data).loc[self._data['gene_symbol'] == gene]
                g = l['disease_name'].tolist()
                new_g = set(g)
-               new_lg = list(new_g)
-               return new_lg, len(new_lg)
+               return new_g, len(new_g)
  
 
-class AssociatedGene(Metadata):
+class AssociatedGene(Data):
     
     def execute(self, disease):
             
@@ -123,12 +107,10 @@ class AssociatedGene(Metadata):
             l = (self._data).loc[self._data['diseaseid'] == disease]
             g = l['gene_symbol'].tolist()
             new_g = set(g)
-            new_lg = list(new_g)
-            return new_lg, len(new_lg)
+            return new_g, len(new_g)
             
          if (disease in self._data['disease_name'].unique()):
             l = (self._data).loc[self._data['disease_name'] == disease]
             g = l['gene_symbol'].tolist()
             new_g = set(g)
-            new_lg = list(new_g)
-            return new_lg, len(new_lg)
+            return new_g, len(new_g)
