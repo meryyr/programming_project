@@ -101,8 +101,7 @@ class AssociatedDisease(Metadata):
                l = (self._data).loc[self._data['geneid'] == int(gene)]
                g = l['disease_name'].tolist()
                new_g = set(g)
-               new_lg = list(new_g)
-               return new_lg, len(new_lg)
+               return new_g, len(new_g)
            
        except ValueError: 
            
