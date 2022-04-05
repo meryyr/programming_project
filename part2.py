@@ -25,8 +25,8 @@ class Distinct(Data): #subclass to find distinct elements, uses either gene_evid
 
     def execute(self):
         l = self._data.to_numpy() #pandas to numpy
-        column_id = l[:,:1] #take second column
-        column_symbol = l[:,4] #take fifth column
+        column_id = l[:,:1] #take 2nd column
+        column_symbol = l[:,4] #take 5th column
         unique_id = np.unique(column_id)
         unique_symbol = np.unique(column_symbol)       
         return  unique_id, len(unique_id), unique_symbol, len(unique_symbol)
@@ -38,19 +38,19 @@ class Sentence(Data): #subclass to find associated sentences, uses either gene_e
         
         try:
             int(id_symbol) #try to make an int of the input
-            for index_number in range(len(self._data)):
-                if self._data.iat[index_number, 0] == int(id_symbol):# or self._data.iat[index_number, 0] == int(id_symbol): #check first column of the dataframe
+            for index_number in range(len(self._data)): #loop over index numbers of the dataframe
+                if self._data.iat[index_number, 0] == int(id_symbol):
                     l.append(self._data.iat[index_number, 1])
         
         except ValueError: #if the input is a string:
             if id_symbol[:2] in ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']: #check if input is a disease_id
-                for index_number in range(len(self._data)): #loop over index numbers of the dataframe
-                    if self._data.iat[index_number, 0] == id_symbol:
+                for index_number in range(len(self._data)):
+                    if self._data.iat[index_number, 0] == id_symbol: #check 1st column of the dataframe
                         l.append(self._data.iat[index_number, 1])
                    
             else: 
                 for index_number in range(len(self._data)):
-                    if self._data.iat[index_number, 4] == id_symbol: #loop over fifth column of the dataframe
+                    if self._data.iat[index_number, 4] == id_symbol: #check 5th column of the dataframe
                         l.append(self._data.iat[index_number, 1] )
             
            
@@ -63,8 +63,7 @@ class Sentence(Data): #subclass to find associated sentences, uses either gene_e
 class MostFrequentAssociations(Data): #subclass to find 10-top most associated genes/diseases, uses the merged dataset 
     
     def execute(self): 
-        top10 = self._data[['gene_symbol', 'disease_name']].value_counts()[:10].index #pandas value counts function to find highest frequency 
-        #dataframe_a = pd.DataFrame(a, columns = ['Associations: (Gene,Disease)'])
+        top10 = self._data[['gene_symbol', 'disease_name']].value_counts()[:10].index #pandas value_counts function to find highest frequency 
         return top10, len(top10) #dataframe_a
        
        
