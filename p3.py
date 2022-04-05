@@ -51,12 +51,12 @@ def sentence_disease():
 
 
 
-@app.route('/operation_AssociatedDisease')
+@app.route('/operation_AssociatedDiseases')
 def AssociatedDisease():
     value = 'No input yet'
     return render_template('associatedisease.html', value= value)
 
-@app.route('/operation_AssociatedDisease', methods=['POST'])
+@app.route('/operation_AssociatedDiseases', methods=['POST'])
 def associate_disease():
     value = request.form['valuedis']        
     display = Registry().Associations(value)[str('AssociatedDiseases')]
