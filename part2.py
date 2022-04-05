@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 class Data: #abstract superclass to give data to any of its subclasses
      
