@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 class Data: #abstract superclass to give data to any of its subclasses
      
@@ -19,7 +19,7 @@ class RowsColumns(Data): #subclass to find dimensions, uses either gene_evidence
 class ColumnLabel(Data): #subclass to find column labels, uses either gene_evidences or disease_evidences
 
     def execute(self):
-        return self._data.columns  #numpy columns function to get columns names
+        return self._data.columns 
         
 class Distinct(Data): #subclass to find distinct elements, uses either gene_evidences or disease_evidences
 
