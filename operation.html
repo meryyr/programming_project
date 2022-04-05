@@ -57,36 +57,38 @@
         {% if operation == 'DistinctGene' %}
             <h2>There are {{display[1]}}</small></a> </span> distinct gene ID's</h2>
             <br>
-
+            <div id="cols">
             {%for i in display[0]%}  
                 {{i}}
             {%endfor%}
-			<br>
-		
-		<h2>There are {{display[1]}}</small></a> </span> distinct gene symbols</h2>
-            <br>
-			
+            </div>
+            <br></br> <h2>There are {{display[1]}}</small></a> </span> distinct gene symbols</h2>
+            <br><div id="cols2">
 			{%for i in display[2]%}    
                 {{i}}
 				<br>
             {%endfor%}
+            </div>
 		{%endif%}
 		
         {% if operation == 'DistinctDisease' %}
-        <h2>There are {{display[1]}}</small></a> </span> distinct disease ID's</h2>
-        <br>
-
-            {%for i in display[0]%}    
-                {{i}}
-                <br>
-            {%endfor%}
+		<h2>There are {{display[1]}}</small></a> </span> distinct disease ID's</h2>
+		<br>
+		<h2>There are {{display[1]}}</small></a> </span> distinct disease ID's</h2>
+		<br><div id="cols">
+		    {%for i in display[0]%}    
+			{{i}}
+		    {%endfor%}
+		    </div>
+		<br>    
 		<h2>There are {{display[1]}}</small></a> </span> distinct disease names</h2>
-        <br>
-            {%for i in display[2]%}    
-                {{i}}
-				<br>
-            {%endfor%}
-        {%endif%}
+		<br> <div id="cols">
+		{%for i in display[2]%}    
+			{{i}}
+		<br>
+		{%endfor%}
+		</div>
+      	{%endif%}
 		
 		{% if operation == 'MostFrequentAssociations' %}
 
