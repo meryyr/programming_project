@@ -16,8 +16,12 @@
 		<h4>No genes are associated to the disease {{value}}, try another one</h4>
 		{%else%}
 		<h4>There are {{display[1]}} genes associated to disease {{value}}</h4>
-			{% for i in display[0] %}
-       		<i>{{i | safe}}<i>
+		{% for i in display[2] %}
+			{%if i == display[1] - 1%} 
+				{{display[0][i]}}
+			{%else%}
+		   		{{display[0][i]}},
+			{%endif%} 
         	{% endfor %}   
 		{%endif%}
 		<i><a href="/"><span class = "home_link">Go back to home page</span></a></i>  
