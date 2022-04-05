@@ -37,15 +37,15 @@ class Sentence(Data): #subclass to find associated sentences, uses either gene_e
         l = [] 
         
         try:
-            int(id_symbol) #try to make an int of the input
+            int(id_symbol) #try to make an int of the input, to see if input is a geneid
             for index_number in range(len(self._data)): #loop over index numbers of the dataframe
-                if self._data.iat[index_number, 0] == int(id_symbol):
+                if self._data.iat[index_number, 0] == int(id_symbol): #check 1st column of the dataframe
                     l.append(self._data.iat[index_number, 1])
         
         except ValueError: #if the input is a string:
             if id_symbol[:2] in ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']: #check if input is a disease_id
                 for index_number in range(len(self._data)):
-                    if self._data.iat[index_number, 0] == id_symbol: #check 1st column of the dataframe
+                    if self._data.iat[index_number, 0] == id_symbol: 
                         l.append(self._data.iat[index_number, 1])
                    
             else: 
@@ -64,7 +64,7 @@ class MostFrequentAssociations(Data): #subclass to find 10-top most associated g
     
     def execute(self): 
         top10 = self._data[['gene_symbol', 'disease_name']].value_counts()[:10].index #pandas value_counts function to find highest frequency 
-        return top10, len(top10) #dataframe_a
+        return top10, len(top10)
        
        
 class AssociatedDisease(Data): #subclass to find associated genes to a given disease, uses the merged dataset
@@ -82,7 +82,7 @@ class AssociatedDisease(Data): #subclass to find associated genes to a given dis
            
        except ValueError: 
            
-           if (gene in self._data['gene_symbol'].unique()):
+           if gene in self._data['gene_symbol'].unique():
                l = (self._data).loc[self._data['gene_symbol'] == gene]
                g = l['disease_name'].tolist()
                new_g = set(g)
@@ -101,6 +101,6 @@ class AssociatedGene(Data): #subclass to find associated genes to a given diseas
             
          if disease in self._data['disease_name'].unique(): #check if given disease is in the diseas_name column
             l = (self._data).loc[self._data['disease_name'] == disease] #get all elements equal to input 
-            g = l['gene_symbol'].tolist() #make list of the column 'gene_symbol'
+            g = l['gene_symbol'].tolist() #make list of the gene_symbol column
             new_g = set(g)
             return new_g, len(new_g), range(len(listg))
