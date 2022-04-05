@@ -6,12 +6,13 @@
         <h1>Operations on the DisGeNET COVID-19 data collection</h1>
         <h2>Using  <TT><span class="file"> <a href="/gene">gene_evidences.tsv</a> </span></TT> and <TT><span class="file"> <a href="/disease">disease_evidences.tsv</a>  </span></TT></h2>
             <br>
+        <ul>
             {% for i in operations %}
                 <big><li><a href= {{url_for('operation', type = i )}}>{{i}}</a></li></big>
             {%endfor%}
             {% for k in op_input: %}
                 <big><li><a href= "operation_{{k}}">{{k}}</a></li></big>
             {% endfor %}
-    
+        </ul>
     </body>
 </html>
