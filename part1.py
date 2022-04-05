@@ -46,7 +46,7 @@ class MergeDataset(ImportDisease,ImportGene):
         self.merged_dataset = pd.merge(self.dfdisease,self.dfgene,  on = ('pmid','sentence', 'nsentence'), how = "inner")
         
     def operation(self):
-        result = part2.MergedDataset(self.merged_dataset).execute()
+        result = part2.MostFrequentAssociations(self.merged_dataset).execute()
         return result
                 
     def input_gene(self,gene):
@@ -57,9 +57,10 @@ class MergeDataset(ImportDisease,ImportGene):
         result = part2.AssociatedGene(self.merged_dataset).execute(disease) 
         return result
 
+
 class Registry:
 
-    def __init__(self,name_operations = ['RowsColumnsGene','RowsColumnsDisease','ColumnLabelGene','ColumnLabelDisease','DistinctGene','DistinctDisease','MergedDataset'],name_operations_input = ['SentenceDisease','SentenceGene','AssociatedDiseases','AssociatedGenes']):
+    def __init__(self,name_operations = ['RowsColumnsGene','RowsColumnsDisease','ColumnLabelGene','ColumnLabelDisease','DistinctGene','DistinctDisease','MostFrequentAssociations'],name_operations_input = ['SentenceDisease','SentenceGene','AssociatedDiseases','AssociatedGenes']):
         self.name_operations = name_operations
         self.name_operations_input = name_operations_input
         self.datsetdisease = "disease_evidences.tsv"
@@ -84,8 +85,8 @@ class Registry:
         return r
     
     def Merge(self):
-        operation = part2.MergedDataset
-        r = {self.name_operations[6]: MergeDataset(self.datsetdisease,self.datasetgene,operation).operation()}
+        #operation = part2.MostFrequentAssociations
+        r = {self.name_operations[6]: MergeDataset(self.datsetdisease,self.datasetgene).operation()}
         return r
         
     def Sentences(self,value):
@@ -94,7 +95,9 @@ class Registry:
         return r 
   
     def Associations(self,value):
-        operation_disease = part2.AssociatedDisease
-        operation_gene = part2.AssociatedGene
-        r = {self.name_operations_input[2]: MergeDataset(self.datsetdisease,self.datasetgene,operation_disease).input_gene(value),self.name_operations_input[3]: MergeDataset(self.datsetdisease,self.datasetgene,operation_gene).input_disease(value)} 
+        #operation_disease = part2.AssociatedDisease
+        #operation_gene = part2.AssociatedGene
+        r = {self.name_operations_input[2]: MergeDataset(self.datsetdisease,self.datasetgene).input_gene(value),self.name_operations_input[3]: MergeDataset(self.datsetdisease,self.datasetgene).input_disease(value)} 
         return r
+
+

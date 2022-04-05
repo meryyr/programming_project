@@ -96,13 +96,8 @@ def operation():
         return render_template('operation.html', title=my_operation, operation=my_operation, display=display)
      
   
-    elif str(my_operation) == 'MergedDataset':
+    elif str(my_operation) == 'MostFrequentAssociations':
          display = Registry().Merge()[str(my_operation)]
-         # html = display.to_html()
-        
-         # text_file = open("merge.html", "w")
-         # text_file.write(html)
-         # text_file.close()
          return render_template('operation.html', title=my_operation, operation=my_operation, display=display)
 
     
