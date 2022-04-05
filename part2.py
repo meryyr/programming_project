@@ -2,91 +2,82 @@ import pandas as pd
 import numpy as np
 from abc import ABC, abstractmethod
 
-class Data:
+class Data: #abstract superclass to give data to any of its subclasses
      
-     def __init__(self, data: pd.DataFrame):    #abstract class
+     def __init__(self, data: pd.DataFrame): 
         self._data = data 
         
      @abstractmethod
      def execute(self): 
         pass
 
-class RowsColumns(Data):
+class RowsColumns(Data): #subclass to find dimensions, uses either gene_evidences or disease_evidences
  
     def execute(self):
-        return self._data.shape  
+        return self._data.shape
         
-class ColumnLabel(Data):   
+class ColumnLabel(Data): #subclass to find column labels, uses either gene_evidences or disease_evidences
 
     def execute(self):
-        return self._data.columns 
+        return self._data.columns  #numpy columns function to get columns names
         
-class Distinct(Data): 
+class Distinct(Data): #subclass to find distinct elements, uses either gene_evidences or disease_evidences
 
     def execute(self):
-        l = self._data.to_numpy()
-        column_id = l[:,:1]
-        column_symbol = l[:,4]
+        l = self._data.to_numpy() #pandas to numpy
+        column_id = l[:,:1] #take second column
+        column_symbol = l[:,4] #take fifth column
         unique_id = np.unique(column_id)
-        unique_symbol = np.unique(column_symbol)
-        
-        li = []
-        ls = []
-        
-        for i in unique_id:
-            li += [i]
-        for e in unique_symbol:
-            ls += [e]
-       
+        unique_symbol = np.unique(column_symbol)       
         return  unique_id, len(unique_id), unique_symbol, len(unique_symbol)
 
-class Sentence(Data):
+class Sentence(Data): #subclass to find associated sentences, uses either gene_evidences or disease_evidences
   
     def execute(self,id_symbol):  
         l = [] 
         
         try:
-            int(id_symbol)
-            for index_number in range(len(self._data)): #loops over all the indices of the df
-                if self._data.iat[index_number, 0] == int(id_symbol):# or self._data.iat[index_number, 0] == int(id_symbol): # .iat gives the element of column 0 , at 'index_number'
+            int(id_symbol) #try to make an int of the input
+            for index_number in range(len(self._data)):
+                if self._data.iat[index_number, 0] == int(id_symbol):# or self._data.iat[index_number, 0] == int(id_symbol): #check first column of the dataframe
                     l.append(self._data.iat[index_number, 1])
         
-        except ValueError:
-            if id_symbol[:2] in ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']:
-                for index_number in range(len(self._data)): #loops over all the indices of the df
-                    if self._data.iat[index_number, 0] == id_symbol:# or self._data.iat[index_number, 0] == int(id_symbol): # .iat gives the element of column 0 , at 'index_number'
+        except ValueError: #if the input is a string:
+            if id_symbol[:2] in ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']: #check if input is a disease_id
+                for index_number in range(len(self._data)): #loop over index numbers of the dataframe
+                    if self._data.iat[index_number, 0] == id_symbol:
                         l.append(self._data.iat[index_number, 1])
                    
             else: 
-                for index_number in range(len(self._data)): #loops over all the indices of the df
-                    if self._data.iat[index_number, 4] == id_symbol: # .iat gives the element of column 0 , at 'index_number'
-                        l.append(self._data.iat[index_number, 1] ) #append the element that is found in column 1, at 'index_number'
+                for index_number in range(len(self._data)):
+                    if self._data.iat[index_number, 4] == id_symbol: #loop over fifth column of the dataframe
+                        l.append(self._data.iat[index_number, 1] )
             
            
-        if not l: #empty lists are considered 'False', so if 'l' is empty then:
-            return #"No such ID or symbol in the dataframe, try another one."
+        if not l: 
+            return #return if nothing is found
     
         return l, len(l) 
 
 
-class MergedDataset(Data):
+class MostFrequentAssociations(Data): #subclass to find 10-top most associated genes/diseases, uses the merged dataset 
     
     def execute(self): 
-        top10 = self._data[['gene_symbol', 'disease_name']].value_counts()[:10].index
+        top10 = self._data[['gene_symbol', 'disease_name']].value_counts()[:10].index #pandas value counts function to find highest frequency 
         #dataframe_a = pd.DataFrame(a, columns = ['Associations: (Gene,Disease)'])
         return top10, len(top10) #dataframe_a
        
        
-class AssociatedDisease(Data):
+class AssociatedDisease(Data): #subclass to find associated genes to a given disease, uses the merged dataset
    
    def execute(self, gene):
        
        try: 
-           int(gene)
+           int(gene) #try to make int of input
            
-           if (int(gene) in self._data['geneid'].unique()):
-               l = (self._data).loc[self._data['geneid'] == int(gene)]
-               g = l['disease_name'].tolist()
+           if int(gene) in self._data['geneid'].unique(): #check if input is in the geneid column
+               l = (self._data).loc[self._data['geneid'] == int(gene)] #make dataframe only with rows containing elements equal to input
+               g = l['disease_name'].tolist() #make list of disease_name column
                new_g = set(g)
                return new_g, len(new_g)
            
@@ -99,18 +90,18 @@ class AssociatedDisease(Data):
                return new_g, len(new_g)
  
 
-class AssociatedGene(Data):
+class AssociatedGene(Data): #subclass to find associated genes to a given disease, uses the merged dataset
     
     def execute(self, disease):
             
-         if (disease in self._data['diseaseid'].unique()):
-            l = (self._data).loc[self._data['diseaseid'] == disease]
-            g = l['gene_symbol'].tolist()
+         if disease in self._data['diseaseid'].unique(): #check if input is in the diseaseid column
+            l = (self._data).loc[self._data['diseaseid'] == disease] #make dataframe only with rows containing elements equal to input
+            g = l['gene_symbol'].tolist() #make list of gene_symbol column
             new_g = set(g)
-            return new_g, len(new_g)
+            return new_g, len(new_g), range(len(listg))
             
-         if (disease in self._data['disease_name'].unique()):
-            l = (self._data).loc[self._data['disease_name'] == disease]
-            g = l['gene_symbol'].tolist()
+         if disease in self._data['disease_name'].unique(): #check if given disease is in the diseas_name column
+            l = (self._data).loc[self._data['disease_name'] == disease] #get all elements equal to input 
+            g = l['gene_symbol'].tolist() #make list of the column 'gene_symbol'
             new_g = set(g)
-            return new_g, len(new_g)
+            return new_g, len(new_g), range(len(listg))
