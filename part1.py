@@ -1,103 +1,50 @@
 import part2
 import pandas as pd
 
-class ImportDisease:
-
-    def __init__(self, requested_operation, operations=(part2.RowsColumns, part2.ColumnLabel, part2.Distinct), datadisease="disease_evidences.tsv"):
-        self.dfdisease = pd.read_csv(datadisease, delimiter="\t")
-        self.operations = operations
-        self.requested_operation = str(requested_operation)
-
-    def operation(self):
-        for op in self.operations:
-            if str(op) == self.requested_operation:
-                operation = op(self.dfdisease)
-                result = operation.execute()
-                return result
-    
-    def input_operation(self,value):
-        result = part2.Sentence(self.dfdisease).execute(value) 
-        return result  
-
-class ImportGene:
-
-    def __init__(self, requested_operation, operations=(part2.RowsColumns, part2.ColumnLabel, part2.Distinct), datagene="gene_evidences.tsv"):
-        self.dfgene = pd.read_csv(datagene, delimiter="\t")
-        self.operations = operations
-        self.requested_operation = str(requested_operation)
-
-    def operation(self):
-        for op in self.operations:
-            if str(op) == self.requested_operation:
-                operation = op(self.dfgene)
-                result = operation.execute() 
-                return result
-
-    def input_operation(self,value):
-        result = part2.Sentence(self.dfgene).execute(value) 
-        return result   
-        
- 
-class MergeDataset(ImportDisease,ImportGene):
-    
-    def __init__(self, dfdisease, dfgene):
-        ImportDisease.__init__(self, dfdisease)
-        ImportGene.__init__(self, dfgene)
-        self.merged_dataset = pd.merge(self.dfdisease,self.dfgene,  on = ('pmid','sentence', 'nsentence'), how = "inner")
-        
-    def operation(self):
-        result = part2.MostFrequentAssociations(self.merged_dataset).execute()
-        return result
-                
-    def input_gene(self,gene):
-        result = part2.AssociatedDisease(self.merged_dataset).execute(gene) 
-        return result
-
-    def input_disease(self,disease):
-        result = part2.AssociatedGene(self.merged_dataset).execute(disease) 
-        return result
-
 
 class Registry:
 
-    def __init__(self,name_operations = ['RowsColumnsGene','RowsColumnsDisease','ColumnLabelGene','ColumnLabelDisease','DistinctGene','DistinctDisease','MostFrequentAssociations'],name_operations_input = ['SentenceDisease','SentenceGene','AssociatedDiseases','AssociatedGenes']):
-        self.name_operations = name_operations
-        self.name_operations_input = name_operations_input
-        self.datsetdisease = "disease_evidences.tsv"
-        self.datasetgene = "gene_evidences.tsv"
+    def __init__(self):
+        self.name_operations = ['RowsColumnsGene','RowsColumnsDisease','ColumnLabelGene','ColumnLabelDisease','DistinctGene','DistinctDisease','MostFrequentAssociations']
+        self.name_operations_input = ['SentenceDisease','SentenceGene','AssociatedDiseases','AssociatedGenes']
+      
+        self.__dfdisease = pd.read_csv("disease_evidences.tsv", delimiter="\t")
+        self.__dfgene = pd.read_csv("gene_evidences.tsv", delimiter="\t")
+        
+        self.__merged_dataset = pd.merge(self.__dfdisease,self.__dfgene, on = ('pmid','sentence', 'nsentence'), how = "inner")  #
     
     def RowsColumns(self):
         operation = part2.RowsColumns
-        r = {self.name_operations[0]: ImportGene(operation).operation(),
-             self.name_operations[1]: ImportDisease(operation).operation()}
+        r = {self.name_operations[0]: operation(self.__dfgene).execute(),
+             self.name_operations[1]: operation(self.__dfdisease).execute()}
         return r 
     
     def ColumnLabel(self):
         operation = part2.ColumnLabel
-        r = {self.name_operations[2]: ImportGene(operation).operation(),
-             self.name_operations[3]: ImportDisease(operation).operation()}
+        r = {self.name_operations[2]: operation(self.__dfgene).execute(),
+             self.name_operations[3]: operation(self.__dfdisease).execute()}
         return r
             
     def Distinct(self):
         operation = part2.Distinct
-        r = {self.name_operations[4]: ImportGene(operation).operation(),
-             self.name_operations[5]: ImportDisease(operation).operation()}
+        r = {self.name_operations[4]: operation(self.__dfgene).execute(),
+             self.name_operations[5]: operation(self.__dfdisease).execute()}
         return r
     
     def Merge(self):
-        #operation = part2.MostFrequentAssociations
-        r = {self.name_operations[6]: MergeDataset(self.datsetdisease,self.datasetgene).operation()}
+        operation = part2.MostFrequentAssociations
+        r = {self.name_operations[6]:operation(self.__merged_dataset).execute()}
         return r
         
     def Sentences(self,value):
         operation = part2.Sentence
-        r = {self.name_operations_input[0]: ImportDisease(operation).input_operation(value), self.name_operations_input[1]: ImportGene(operation).input_operation(value)}
+        r = {self.name_operations_input[0]: operation(self.__dfdisease).execute(value) , self.name_operations_input[1]: operation(self.__dfgene).execute(value)}
         return r 
   
     def Associations(self,value):
-        #operation_disease = part2.AssociatedDisease
-        #operation_gene = part2.AssociatedGene
-        r = {self.name_operations_input[2]: MergeDataset(self.datsetdisease,self.datasetgene).input_gene(value),self.name_operations_input[3]: MergeDataset(self.datsetdisease,self.datasetgene).input_disease(value)} 
+        operation_disease = part2.AssociatedDisease
+        operation_gene = part2.AssociatedGene
+        r = {self.name_operations_input[2]: operation_disease(self.__merged_dataset).execute(value),self.name_operations_input[3]: operation_gene(self.__merged_dataset).execute(value)} 
         return r
 
 
