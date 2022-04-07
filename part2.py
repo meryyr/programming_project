@@ -97,10 +97,10 @@ class AssociatedGene(Data): #subclass to find associated genes to a given diseas
             l = (self._data).loc[self._data['diseaseid'] == disease] #make dataframe only with rows containing elements equal to input
             g = l['gene_symbol'].tolist() #make list of gene_symbol column
             new_g = set(g)
-            return new_g, len(new_g), range(len(listg))
+            return new_g, len(new_g)
             
          if disease in self._data['disease_name'].unique(): #check if input is in the diseas_name column
             l = (self._data).loc[self._data['disease_name'] == disease]
             g = l['gene_symbol'].tolist()
             new_g = set(g)
-            return new_g, len(new_g), range(len(listg))
+            return new_g, len(new_g)
