@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from abc import ABC, abstractmethod
 
-class Data: #abstract superclass to give data to any of its subclasses
+class Data(ABC): #abstract superclass to give data to any of its subclasses
      
      def __init__(self, data: pd.DataFrame): 
         self._data = data 
