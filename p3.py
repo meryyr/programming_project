@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,redirect, url_for
+from flask import Flask, render_template, request
 from part1 import *
 import os
 app = Flask(__name__, template_folder='template')
@@ -26,54 +26,52 @@ def disease():
     size = os.path.getsize('disease_evidences.tsv')
     return render_template('disease.html', data = data, size = size) 
   
-@app.route('/operation_SentenceGene')
-def SentenceGene():
-    value = 'No input yet'
-    return render_template('sentencegene.html', value= value)
-   
-@app.route('/operation_SentenceGene', methods=['POST'])
-def sentence_gene():
-    value = request.form['value']
-    display = Registry().Sentences(value)[str('SentenceGene')]
-    return render_template('sentencegene.html', display=display, value= value)
 
-
-@app.route('/operation_SentenceDisease')
-def SentenceDisease():
-    value = 'No input yet'
-    return render_template('sentencedisease.html', value=value)
-
-@app.route('/operation_SentenceDisease', methods=['POST'])
-def sentence_disease():
-    value = request.form['valued']
-    display = Registry().Sentences(value)[str('SentenceDisease')]
-    return render_template('sentencedisease.html', display=display, value= value)
+@app.route('/operation_SentenceGene', methods = ['GET','POST'])     
+def sentencegene(): 
+    if request.method == 'POST':
+       value = request.form['value']
+       display = Registry().Sentences(value)[str('SentenceGene')]
+       return render_template('sentencegene.html', display=display, value= value)
+    else: 
+       value = 'No input yet'
+       return render_template('sentencegene.html', value= value)
 
 
 
-@app.route('/operation_AssociatedDiseases')
-def AssociatedDisease():
-    value = 'No input yet'
-    return render_template('associatedisease.html', value= value)
+@app.route('/operation_SentenceDisease', methods=['GET','POST'])
+def sentencedisease():
+    if request.method == 'POST':
+        value = request.form['valued']
+        display = Registry().Sentences(value)[str('SentenceDisease')]
+        return render_template('sentencedisease.html', display=display, value= value)
+        
+    else: 
+        value = 'No input yet'
+        return render_template('sentencedisease.html', value=value)
 
-@app.route('/operation_AssociatedDiseases', methods=['POST'])
-def associate_disease():
-    value = request.form['valuedis']        
-    display = Registry().Associations(value)[str('AssociatedDiseases')]
-    return render_template('associatedisease.html', display=display, value= value)
+
+@app.route('/operation_AssociatedDiseases', methods=['GET','POST'])
+def associatedisease():
+    if request.method == 'POST':
+        value = request.form['valuedis']        
+        display = Registry().Associations(value)[str('AssociatedDiseases')]
+        return render_template('associatedisease.html', display=display, value= value)
+    else:
+        value = 'No input yet'
+        return render_template('associatedisease.html', value= value)
 
 
 
-@app.route('/operation_AssociatedGenes')
-def AssociatedGenes():
-    value = 'No input yet'
-    return render_template('associatedgene.html',value= value)
-
-@app.route('/operation_AssociatedGenes', methods=['POST'])
-def associated_gene():
-    value = request.form['valueg']  
-    display = Registry().Associations(value)[str('AssociatedGenes')]
-    return render_template('associatedgene.html', display=display,value= value)
+@app.route('/operation_AssociatedGenes', methods=['GET','POST'])
+def associatedgene():
+    if request.method == 'POST':
+        value = request.form['valueg']  
+        display = Registry().Associations(value)[str('AssociatedGenes')]
+        return render_template('associatedgene.html', display=display,value= value)
+    else: 
+        value = 'No input yet'
+        return render_template('associatedgene.html',value= value)
 
 
 
@@ -99,8 +97,6 @@ def operation():
     elif str(my_operation) == 'MostFrequentAssociations':
          display = Registry().Merge()[str(my_operation)]
          return render_template('operation.html', title=my_operation, operation=my_operation, display=display)
-
-    
 
 
 if __name__ == '__main__':
