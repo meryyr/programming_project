@@ -2,19 +2,19 @@
 <html>
     <body>      
 		<form method = "POST">
-		<label for = "label">Insert a disease ID or a disease name to get the sentences associated to the input disease:</label>
-		<p><input type = "text" name = "value" /></p>
-		<p><input type = "submit" value ="Submit" /></p>
+			<label for = "label">Insert a disease ID or a disease name to get the sentences associated to the input disease:</label>
+			<p><input type = "text" name = "valued" /></p>
+			<p><input type = "submit" value ="Submit" /></p>
 		</form>
 		{%if value == 'No input yet'%} 
 			<!--- nothing --->
 		{%elif display == None%}
-		<h4>No sentences found for disease {{value}}, try another one</h4>
+			<h4>No sentences found for disease {{value}}, try another one</h4>
 		{%else%}
-		<h2>There are {{display[1]}} sentences found for disease {{value}}</h2> 
-		{% for i in display[0] %}
-			<i><p>{{i | safe}}</p><i>
- 		{% endfor %} 
+			<h2>There are {{display[1]}} sentences found for disease {{value}}</h2> 
+			{% for i in display[0] %}
+				<i><p>{{i | safe}}</p><i>
+			{% endfor %} 
 		{%endif%} 
 		<i><a href="/"><span class = "home_link">Go back to home page</span></a></i>
 	</body>
