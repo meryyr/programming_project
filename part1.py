@@ -38,13 +38,15 @@ class Registry:
         
     def Sentences(self,value):
         operation = part2.Sentence
-        r = {self.name_operations_input[0]: operation(self.__dfdisease).execute(value) , self.name_operations_input[1]: operation(self.__dfgene).execute(value)}
+        r = {self.name_operations_input[0]: operation(self.__dfdisease).execute(value),
+             self.name_operations_input[1]: operation(self.__dfgene).execute(value)}
         return r 
   
     def Associations(self,value):
         operation_disease = part2.AssociatedDisease
         operation_gene = part2.AssociatedGene
-        r = {self.name_operations_input[2]: operation_disease(self.__merged_dataset).execute(value),self.name_operations_input[3]: operation_gene(self.__merged_dataset).execute(value)} 
+        r = {self.name_operations_input[2]: operation_disease(self.__merged_dataset).execute(value),
+             self.name_operations_input[3]: operation_gene(self.__merged_dataset).execute(value)} 
         return r
 
 
