@@ -7,7 +7,7 @@
         
 		<form method = "POST">
 		<label for = "label"> Insert a disease ID or a disease name:</label>
-		<p><input type = "text" name = "valueg" /></p>
+		<p><input type = "text" name = "value" /></p>
 		<p><input type = "submit" value ="Submit" /></p>
 		</form>
 		{%if value == 'No input yet'%} 
@@ -16,13 +16,9 @@
 		<h4>No genes are associated to the disease {{value}}, try another one</h4>
 		{%else%}
 		<h4>There are {{display[1]}} genes associated to disease {{value}}</h4>
-		{% for i in display[2] %}
-			{%if i == display[1] - 1%} 
-				{{display[0][i]}}
-			{%else%}
-		   		{{display[0][i]}},
-			{%endif%} 
-        	{% endfor %}   
+			{% for i in display[0] %}
+			<i>{{i}}<i>
+			{% endfor %}   
 		{%endif%}
 		<i><a href="/"><span class = "home_link">Go back to home page</span></a></i>  
     </body>
