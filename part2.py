@@ -59,14 +59,14 @@ class Sentence(Data):                               #subclass which returns asso
         return l, len(l) 
 
 
-class MostFrequentAssociations(Data):                                   #subclass which returns 10-top most associated genes and diseases 
+class MostFrequentAssociations(Data):                   #subclass which returns 10-top most associated genes and diseases 
     
     def execute(self): 
         top10 = self._data[['gene_symbol', 'disease_name']].value_counts()[:10].index 
         return top10, len(top10)
        
        
-class AssociatedDisease(Data):                                          #subclass which returns associated diseases to a given gene
+class AssociatedDisease(Data):                          #subclass which returns associated diseases to a given gene
    
    def execute(self, gene):
        
@@ -88,7 +88,7 @@ class AssociatedDisease(Data):                                          #subclas
                return new_g, len(new_g)
  
 
-class AssociatedGene(Data):                                          #subclass which returns associated genes to a given disease
+class AssociatedGene(Data):                              #subclass which returns associated genes to a given disease
     
     def execute(self, disease):
             
