@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from abc import ABC, abstractmethod
 
-class Data(ABC): #abstract superclass to give data to any of its subclasses
+class Data(ABC):                                    #abstract superclass to provide the correct DataFrame to any of its subclasses
      
      def __init__(self, data: pd.DataFrame): 
         self._data = data 
@@ -11,12 +11,12 @@ class Data(ABC): #abstract superclass to give data to any of its subclasses
      def execute(self): 
         pass
 
-class RowsColumns(Data): #subclass to find dimensions, uses either gene_evidences or disease_evidences
+class RowsColumns(Data):                            #subclass which returns dimensions of the DataFrame
  
     def execute(self):
         return self._data.shape
         
-class ColumnLabel(Data): #subclass to find column labels, uses either gene_evidences or disease_evidences
+class ColumnLabel(Data):                            #subclass which returns column labels
 
     def execute(self):
         return self._data.columns 
