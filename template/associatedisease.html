@@ -1,16 +1,3 @@
-<!-- <html>
- 
-    <body>
-        <h3>This operation allows you to find which are the diseases associated to a given gene</h3>
-        
-		<form method = "POST">
-		<label for = "label"> Insert a gene ID or a gene symbol:</label>
-		<p><input type = "text" name = "valuedis" /></p>
-		<p><input type = "submit" value ="Submit" /></p>
-		</form>
-		{{display}}       
-    </body>
-</html> -->
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 
 <html>
@@ -20,7 +7,7 @@
         
 		<form method = "POST">
 		<label for = "label"> Insert a gene ID or a gene symbol:</label>
-		<p><input type = "text" name = "valuedis" /></p>
+		<p><input type = "text" name = "value" /></p>
 		<p><input type = "submit" value ="Submit" /></p>
 		</form>
 		{%if value == 'No input yet'%} 
@@ -30,9 +17,8 @@
 		{%else%}
 		<h4>There are {{display[1]}} diseases associated to the gene {{value}}</h4> 
 			{% for i in display[0] %}
-       		<i>{{i | safe}}<i>
-			<br>
-        	{% endfor %} 
+       			<i>{{i}}<i>
+			{% endfor %} 
 		{%endif%}
 		<i><a href="/"><span class = "home_link">Go back to home page</span></a></i>
     </body>
