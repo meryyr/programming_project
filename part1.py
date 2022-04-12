@@ -11,7 +11,7 @@ class Registry:
         self.__dfdisease = pd.read_csv("disease_evidences.tsv", delimiter="\t")
         self.__dfgene = pd.read_csv("gene_evidences.tsv", delimiter="\t")
         
-        self.__merged_dataset = pd.merge(self.__dfdisease,self.__dfgene, on = ('pmid','sentence', 'nsentence'), how = "inner")  #
+        self.__merged_dataset = pd.merge(self.__dfdisease,self.__dfgene, on = ('pmid','sentence', 'nsentence'), how = "inner")  
     
     def RowsColumns(self):
         operation = part2.RowsColumns
