@@ -5,7 +5,7 @@ app = Flask(__name__, template_folder='template')
 
 
 @app.route('/')
-def home_page():
+def home_page():                                                  #page for viewing the list of operations
     operations= Registry().name_operations
     op_input = Registry().name_operations_input
     return render_template('home.html', operations = operations, op_input = op_input)
