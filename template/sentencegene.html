@@ -1,6 +1,8 @@
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <html>
-    <body>
+	<head>
+		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+	</head>
+        <body>
 		<form method = "POST">
 		<label for = "label">Insert a gene ID or a gene symbol to get the sentences associated to the input gene:</label>
 		<p><input type = "text" name = "value" /></p>
